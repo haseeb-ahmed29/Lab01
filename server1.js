@@ -12,7 +12,7 @@ const server = http.createServer((req, res)=>{
     }
     else{
         res.statusCode = 404 // 404 means "page not found"
-        res.end("Sorry, that page does not exist")
+        res.end("Sorry,that page does not exist")
     }
 })
 

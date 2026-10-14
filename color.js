@@ -1,9 +1,10 @@
-const chalk = require ("chalk")
+const chalk = require("chalk")
+ 
+console.log(chalk.green("Good Morning!!"));
+console.log(chalk.blue("Ladiesw and gentlemen!"));
+console.log(chalk.yellow("Hello World!!"));
+console.log(chalk.red("Aptech Learning!!"));
 
-console.log(chalk.green("Good Morning"));
-console.log(chalk.red("Ladies and Gentalman, crazy hogaya"));
-console.log(chalk.blue("Hello World"));
 
-console.log(chalk.white("Hello World"));
-console.log(chalk.black("Hello World"));
-console.log(chalk.black("Hello World"));
+
+console.log(chalk.red.underline("Aptech Learning!!"));

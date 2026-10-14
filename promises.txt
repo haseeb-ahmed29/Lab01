@@ -1,0 +1,3 @@
+Hello from promises file!
+This is a Promise example in Node.js.
+Reading files using fs.promises.
