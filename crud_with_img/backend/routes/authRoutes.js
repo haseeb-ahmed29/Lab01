@@ -1,0 +1,16 @@
+const express = require("express")
+const router = express.Router();
+
+const {
+    register,
+    verifyEmail,
+    login,
+
+} = require("../controllers/authController");
+
+// Public authentication routes
+router.post("/register", register)
+router.get("/verify-email/:token", verifyEmail)
+router.post("/login", login)
+
+module.exports = router;
