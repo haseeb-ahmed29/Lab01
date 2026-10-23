@@ -12,3 +12,50 @@ const jwt = require("jsonwebtoken")
 const User = require("../Models/User");
 
 const sendEmail = require("../utils/sendEmail")
+
+// Helper function to generate JWT:
+const generateToken = (id) => {
+    //jwt.sign() ---> ek naya token generate hoga
+    return jwt.sign({id}, process.env.JWT_SECRET, {
+        // "7d" ka matlab token 7 days bad expire hojaye
+        expiresIn: "7d"
+    });
+};
+
+// Register a new User:
+const register = async(req, res) => {
+    try {
+        const {name, email, password} = req.body;
+
+        // Validate fields
+        if(!name || !email || !password){
+            return res.status(400).json({message: "Please provide all required fields"});
+        }
+
+        //Check if user already exists
+        const existingUser = await User.findOne({email});
+        if(existingUser){
+            return res.status(400).json({message: "An Account with this email already exists"});
+        }
+ // Hash Password(Password ko secure format main convert krdo)
+//Salt password hashing ko zyada secure bana dengay:
+const salt = await bcrypt.genSalt(10);
+const hashedPassword = await bcrypt.hash(password, salt);
+
+// Generate verification token and expiry(24 hours)
+const verificationToken = crypto.randomBytes(32).toString("hex");
+
+// Date.now() current time ko mili seconds m convert krdo
+const verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+//Create User:
+const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    isVerified: false,
+    verificationToken,
+    verificationTokenExpiry 
+})
+}
+}
