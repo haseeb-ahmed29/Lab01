@@ -57,5 +57,16 @@ const user = await User.create({
     verificationToken,
     verificationTokenExpiry 
 })
+//Send Verification Email:
+const clienturl = process.env.CLIENT_URL || "http://localhost:5173";
+const verificationUrl = `${clienturl}/verify-email?token=${verificationToken}`;
+
+const messageHtml = `
+<h2>Welcome, ${user.name}!</h2>
+<p>Thank for you signing up. Please verify your email by clicking the link below:</p>
+<a href="${verificationUrl}" target="_blank" style="display:inline-block; padding:10px 20px; background-color:#007bff; color:white; text-decoration:none; border-radius:4px;">
+Verify Email Address.
+</a>
+`
 }
 }
