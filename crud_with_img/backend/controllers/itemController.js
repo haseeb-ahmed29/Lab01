@@ -157,3 +157,47 @@ return res.status(200).json({
 };
 }
 
+//Delete an item:
+//Delete/api/item/:id
+const deleteItem = async(req, res)=>{
+    try{
+        //Validate MongoDB ObjectId
+        if(!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(400).json({message: "Invalid item ID:"})
+        }
+
+        const item = await Item.findById(id);
+
+        if(!item){
+            return res.status(404).json({message: "Item not found:"})
+        }
+
+        //Ensure only the owner can access the Item
+        if(item.user.toString() !== req.user._id.toString()){
+            return res.status(403).json({message: "Not authorized to delete this item"})
+        }
+
+        //Delete image from Cloudinary if it exists
+        if(item.cloudinary_id){
+            try{
+                await cloudinary.uploader.destroy(item.cloudinary_id);
+            }catch(cleanupError){
+                console.warn("Could not delete image from Cloudinary", cleanupError.message)
+            }
+        }
+
+        await Item.findByIdAndDelete(id);
+        return res.status(200).json({message: "Item deleted Successfully"})
+    }catch(error){
+        console.error("Delete Item Error:", error.message);
+        return res.status(500).json({message: error.message || "Failed to delete item"})
+    }
+}
+
+module.exports = {
+  createItem,
+  getItems,
+  getItemById,
+  updateItem,
+  deleteItem,
+};
